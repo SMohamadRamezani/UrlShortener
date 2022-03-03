@@ -1,0 +1,54 @@
+﻿@model PagedList.IPagedList<ShortUrl.Models.UrlAdresses>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "UrlAdresses";
+}
+
+<h2>Url Shortener</h2>
+
+<p>
+    @Html.ActionLink("Create New Url", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("ShortUrl", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("RealUrl", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("CreateDate", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+    </tr>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShortUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RealUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatDate)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+            <td>
+                @Html.ActionLink("Redirect", "Redirect", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
